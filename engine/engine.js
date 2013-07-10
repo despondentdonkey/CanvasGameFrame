@@ -33,7 +33,7 @@ Time.update = function() {
 
 function Engine() {'use strict';} //Handles the loop since Javascript doesn't offer threading. 
 
-//Initializes everything and starts the loop.
+//Initializes everything needed before you start the loop.
 Engine.init = function(canvasID, frameRate, useInput) {
 	console.time("Engine initialized");
 
@@ -56,9 +56,7 @@ Engine.init = function(canvasID, frameRate, useInput) {
 
 		$(canvas).focus(); //Focus the canvas when initialized so we can use input without having to click into it.
 
-		console.timeEnd("Engine initialized");
-
-		Engine.run();       
+		console.timeEnd("Engine initialized");      
 	} else {
 		console.error("WebGL context not found.");
 	}	
