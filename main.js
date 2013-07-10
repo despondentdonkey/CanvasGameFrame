@@ -1,9 +1,5 @@
 Engine.update = function() {
-	console.log(Time.fps);
-
-    if (Mouse.isDown(Mouse.LEFT)) {
-		console.log(Mouse.x);
-    }
+	$("#fps").html("FPS: " + Time.fps + " | Delta: " + Time.delta);
 }
 
 Engine.render = function() {
@@ -12,5 +8,5 @@ Engine.render = function() {
 }
 
 $(document).ready(function() {
-	Engine.init(60, true);
+	Engine.init("canvas", 60, true);
 });
