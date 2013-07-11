@@ -29,6 +29,34 @@ Time.update = function() {
         Time.delta = deltaTime;
 };
 
+function Canvas(canvasID, _useWebGL, useInput) {
+    'use strict';
+    var id = canvasID,
+    useWebGL = _useWebGL,
+    element = $("#" + id).get(0),
+    context; 
+
+    if (useWebGL) {
+    	context = element.getContext("webgl") || element.getContext("experimental-webgl");
+		if (context) {
+			console.log("WebGL context found for " + id + "!");
+
+			if (useInput) {
+				Keyboard.init(element);
+				Mouse.init(element);
+			}    
+		} else {
+			console.error("WebGL context not found for " + id + ".");
+		}	
+    } else {
+
+    }
+
+    return {
+    	render: function(c) {},
+    }
+}
+
 function Engine() {'use strict';} //Handles the loop since Javascript doesn't offer threading. 
 
 //Initializes everything needed before you start the loop.

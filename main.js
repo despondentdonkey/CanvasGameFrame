@@ -8,6 +8,7 @@ Engine.render = function(gl) {
 }
 
 $(document).ready(function() {
+	Canvas c = Canvas("canvas", true, true);
 	Engine.init("canvas", 60, true, true);
 	Engine.run();
 });
