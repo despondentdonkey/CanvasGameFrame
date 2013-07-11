@@ -1,5 +1,3 @@
-var canvas, gl; //Global gl context and canvas. 
-
 function Time() {'use strict';} //Keeps track of the frame rate and delta time. Also includes useful time functions. 
 
 Time.fps = 0; // Dynamic value containing the frame rate.
@@ -34,32 +32,35 @@ Time.update = function() {
 function Engine() {'use strict';} //Handles the loop since Javascript doesn't offer threading. 
 
 //Initializes everything needed before you start the loop.
-Engine.init = function(canvasID, frameRate, useInput) {
+Engine.init = function(canvasID, frameRate, useWebGL, useInput) {
 	console.time("Engine initialized");
 
 	//Default values
 	Engine.frameRate = typeof frameRate !== "undefined" ? frameRate : 60;
 	Engine.useInput = typeof useInput !== "undefined" ? useInput : true;
+	Engine.useWebGL = typeof useWebGL !== "undefined" ? useWebGL : false;
 
-	canvas = $("#" + canvasID).get(0); //Get the canvas element.
+	Engine.canvas = $("#" + canvasID).get(0); //Get the canvas element.
 
-	gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl"); //Get the WebGL context. If it fails then try to get the experimental one. 
+	if (Engine.useWebGL) {
+		Engine.gc = canvas.getContext("webgl") || canvas.getContext("experimental-webgl"); //Get the WebGL context. If it fails then try to get the experimental one. 
+		if (Engine.gc) {
+			console.log("WebGL context found!");
+			Engine.gc.viewport(0, 0, canvas.width, canvas.height); //Set the view to the canvas width and height.
 
-	if (gl) {
-		console.log("WebGL context found!");
-		gl.viewport(0, 0, canvas.width, canvas.height); //Set the view to the canvas width and height.
-
-		if (Engine.useInput) {
-			Keyboard.init(canvas);
-			Mouse.init(canvas);
-		}
-
-		$(canvas).focus(); //Focus the canvas when initialized so we can use input without having to click into it.
-
-		console.timeEnd("Engine initialized");      
+			if (Engine.useInput) {
+				Keyboard.init(canvas);
+				Mouse.init(canvas);
+			}    
+		} else {
+			console.error("WebGL context not found.");
+		}	
 	} else {
-		console.error("WebGL context not found.");
-	}	
+
+	}
+
+	$(canvas).focus(); //Focus the canvas when initialized so we can use input without having to click into it.
+	console.timeEnd("Engine initialized");  
 }
 
 //This is pretty much the loop. 
@@ -72,10 +73,10 @@ Engine.run = function() {
 	}
 	Time.update();
 
-	Engine.render();
+	Engine.render(Engine.gc);
 	setTimeout(Engine.run, 1000/Engine.frameRate); //Executes this function again after the time has passed which causes a synced loop to occur.
 }
 
 //These methods will be overridden.
 Engine.update = function() {}
-Engine.render = function() {}
+Engine.render = function(c) {}
