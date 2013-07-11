@@ -39,23 +39,51 @@ function Canvas(canvasID, _useWebGL, useInput) {
     if (useWebGL) {
     	context = element.getContext("webgl") || element.getContext("experimental-webgl");
 		if (context) {
-			console.log("WebGL context found for " + id + "!");
-
-			if (useInput) {
-				Keyboard.init(element);
-				Mouse.init(element);
-			}    
+			console.log("WebGL context found for " + id + "!"); 
 		} else {
 			console.error("WebGL context not found for " + id + ".");
 		}	
     } else {
-
+    	context = element.getContext("2d");
+    	if (context) {
+    		console.log("2D context found for " + id + "!");
+    	} else {
+    		console.error("2D context not found for " + id + ".");
+    	}
     }
 
+	if (useInput) {
+		Keyboard.init(element);
+		Mouse.init(element);
+	}   
+
     return {
-    	render: function(c) {},
+    	render: function() {},
+
     	getContext: function() {
     		return context;
+    	},
+
+    	getWidth: function() {
+    		return element.width;
+    	},
+
+    	getHeight: function() {
+    		return element.height;
+    	},
+
+    	clear: function(_x, _y, _width, _height) {
+    		var gc = this.getContext(),
+			x = typeof _x !== "undefined" ? _x : 0,
+			y = typeof _y !== "undefined" ? _y : 0,
+			width = typeof _width !== "undefined" ? _width : this.getWidth(),
+			height = typeof _height !== "undefined" ? _height : this.getHeight();
+
+		    gc.save();
+		    gc.setTransform(1, 0, 0, 1, 0, 0);
+		    gc.clearRect(x, y, width, height);
+		    gc.fillRect(x, y, width, height);
+		    gc.restore();
     	},
     }
 }
@@ -80,7 +108,7 @@ Engine.run = function() {
 	Time.update();
 
 	for (var i=0; i<Engine.canvasList.length; ++i) {
-		Engine.canvasList[i].render(Engine.canvasList[i].getContext());
+		Engine.canvasList[i].render();
 	}
 
 	setTimeout(Engine.run, 1000/Engine.frameRate); //Executes this function again after the time has passed which causes a synced loop to occur.
