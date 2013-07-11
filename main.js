@@ -1,12 +1,21 @@
-var c, c2;
+var c, c2,
+keys = Keyboard();
 
 Engine.update = function() {
 	$("#fps").html("FPS: " + Time.fps + " | Delta: " + Time.delta);
+
+	if (keys.isDown('A')) {
+		console.log("AI BABIE");
+	}
+
+	keys.update();
 }
 
 $(document).ready(function() {
-	c = Canvas("canvas", false, true); //Uses canvas 2d api
-	c2 = Canvas("canvas2", true, true); //Uses WebGL
+	c = Canvas("canvas", false); //Uses canvas 2d api
+	c2 = Canvas("canvas2", true); //Uses WebGL
+
+	keys.init(c.getElement());
 
 	c.render = function() {
 		var gc = c.getContext();

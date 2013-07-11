@@ -29,7 +29,7 @@ Time.update = function() {
         Time.delta = deltaTime;
 };
 
-function Canvas(canvasID, _useWebGL, useInput) {
+function Canvas(canvasID, _useWebGL) {
     'use strict';
     var id = canvasID,
     useWebGL = _useWebGL,
@@ -52,11 +52,6 @@ function Canvas(canvasID, _useWebGL, useInput) {
     	}
     }
 
-	if (useInput) {
-		Keyboard.init(element);
-		Mouse.init(element);
-	}   
-
     return {
     	render: function() {},
 
@@ -70,6 +65,14 @@ function Canvas(canvasID, _useWebGL, useInput) {
 
     	getHeight: function() {
     		return element.height;
+    	},
+
+    	getElement: function() {
+    		return element;
+    	},
+
+    	focus: function() {
+    		$(element).focus();
     	},
 
     	clear: function(_x, _y, _width, _height) {

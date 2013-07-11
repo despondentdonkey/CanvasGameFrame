@@ -1,75 +1,78 @@
-function Keyboard() {'use strict';}
+function Keyboard() {
+	'use strict';
+	var down = [],
+	downCount = 0,
+	pressed = [],
+	pressedCount = 0,
+	released = [],
+	releasedCount = 0;
 
-Keyboard.down = [];
-Keyboard.downCount = 0;
+	return {
+		init: function(element) {
+			$(element).bind('keydown', this.onKeyDown);
+			$(element).bind('keyup', this.onKeyUp);
+		},
 
-Keyboard.pressed = [];
-Keyboard.pressedCount = 0;
+		update: function() {
+			while (pressedCount > 0) {
+				pressedCount--;
+				pressed[pressedCount] = -1;
+			}
 
-Keyboard.released = [];
-Keyboard.releasedCount = 0;
+			while (releasedCount > 0) {
+				releasedCount--;
+				released[releasedCount] = -1;
+			}
+		},
 
-Keyboard.init = function(canvas) {
-	$(canvas).bind('keydown', Keyboard.onKeyDown);
-	$(canvas).bind('keyup', Keyboard.onKeyUp);
+		onKeyDown: function(e) {
+			if (!down[e.which]) {
+				down[e.which] = true;
+				downCount++;
+				pressed[pressedCount] = e.which;
+				pressedCount++;
+			}
+		},
+
+		onKeyUp: function(e) {
+			if (down[e.which]) {
+				down[e.which] = false;
+				downCount--;
+				released[releasedCount] = e.which;
+				releasedCount++;
+			}
+		},
+
+		isDown: function(key) {
+			for (var i = 0; i < down.length; i++) {
+				if (down[(typeof key === "number" ? key:key.charCodeAt(0))]) {
+					return true;
+				}
+			}
+			return false;
+		},
+
+		isPressed: function(key) {
+			for (var i = 0; i < pressed.length; i++) {
+				if (pressed[i] === (typeof key === "number" ? key:key.charCodeAt(0))) {
+					return true;
+				}
+			}
+			return false;
+		},
+
+		isReleased: function(key) {
+			for (var i = 0; i < released.length; i++) {
+				if (released[i] === (typeof key === "number" ? key:key.charCodeAt(0))) {
+					return true;
+				}
+			}
+			return false;
+		},
+	}
 }
 
-Keyboard.update = function() {
-	while (Keyboard.pressedCount > 0) {
-		Keyboard.pressedCount--;
-		Keyboard.pressed[Keyboard.pressedCount] = -1;
-	}
 
-	while (Keyboard.releasedCount > 0) {
-		Keyboard.releasedCount--;
-		Keyboard.released[Keyboard.releasedCount] = -1;
-	}
-}
-
-Keyboard.onKeyDown = function(e) {
-	if (!Keyboard.down[e.which]) {
-		Keyboard.down[e.which] = true;
-		Keyboard.downCount++;
-		Keyboard.pressed[Keyboard.pressedCount] = e.which;
-		Keyboard.pressedCount++;
-	}
-}
-
-Keyboard.onKeyUp = function(e) {
-	if (Keyboard.down[e.which]) {
-		Keyboard.down[e.which] = false;
-		Keyboard.downCount--;
-		Keyboard.released[Keyboard.releasedCount] = e.which;
-		Keyboard.releasedCount++;
-	}
-}
-
-Keyboard.isDown = function(key) {
-	for (var i = 0; i < Keyboard.down.length; i++) {
-		if (Keyboard.down[(typeof key === "number" ? key:key.charCodeAt(0))]) {
-			return true;
-		}
-	}
-	return false;
-}
-
-Keyboard.isPressed = function(key) {
-	for (var i = 0; i < Keyboard.pressed.length; i++) {
-		if (Keyboard.pressed[i] === (typeof key === "number" ? key:key.charCodeAt(0))) {
-			return true;
-		}
-	}
-	return false;
-}
-
-Keyboard.isReleased = function(key) {
-	for (var i = 0; i < Keyboard.released.length; i++) {
-		if (Keyboard.released[i] === (typeof key === "number" ? key:key.charCodeAt(0))) {
-			return true;
-		}
-	}
-	return false;
-}
 
 //Mouse
 function Mouse() {'use strict';}
