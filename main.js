@@ -1,5 +1,6 @@
 var c, c2,
 keys = Keyboard();
+mouse = Mouse();
 
 Engine.update = function() {
 	$("#fps").html("FPS: " + Time.fps + " | Delta: " + Time.delta);
@@ -8,7 +9,12 @@ Engine.update = function() {
 		console.log("AI BABIE");
 	}
 
+	if (mouse.isPressed(Mouse.LEFT)) {
+		console.log(mouse.x);
+	}
+
 	keys.update();
+	mouse.update();
 }
 
 $(document).ready(function() {
@@ -16,6 +22,7 @@ $(document).ready(function() {
 	c2 = Canvas("canvas2", true); //Uses WebGL
 
 	keys.init(c.getElement());
+	mouse.init(c.getElement());
 
 	c.render = function() {
 		var gc = c.getContext();
