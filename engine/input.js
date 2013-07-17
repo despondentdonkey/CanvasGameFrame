@@ -1,3 +1,5 @@
+//input.js a handy input manager if you have a game loop.
+
 function Keyboard() { //tabindex="1" is required in the canvas tag for keyboard use.
 	'use strict';
 	var down = [],
@@ -10,12 +12,12 @@ function Keyboard() { //tabindex="1" is required in the canvas tag for keyboard 
 	releasedCount = 0;
 
 	return {
-		init: function(element) {
+		attach: function(element) { //Attach an element to this instance to check for key presses. 
 			$(element).bind('keydown', this.onKeyDown);
 			$(element).bind('keyup', this.onKeyUp);
 		},
 
-		update: function() {
+		update: function() { //This should be called last in your loop.
 			while (pressedCount > 0) {
 				pressedCount--;
 				pressed[pressedCount] = -1;
@@ -93,13 +95,13 @@ function Mouse() {
 	return {
 		x: 0, y: 0,
 
-		init: function(element) {
+		attach: function(element) { //Attach an element to this instance to check for mouse events. 
 		    $(element).bind('mousemove', this.onMouseMove);
 			$(element).bind('mousedown', this.onMouseDown);
 			$(element).bind('mouseup', this.onMouseUp);
 		},
 
-		update: function() {
+		update: function() { //This should be called last in your loop.
 			while (pressedCount > 0) {
 				pressedCount--;
 				pressed[pressedCount] = -1;
@@ -179,6 +181,19 @@ function Mouse() {
 				}
 			}
 			return false;
+		},
+
+		isColliding: function(x1, y1, x2, y2) {
+			if (this.x >= x1 && this.x <= x2) {
+				if (this.y >= y1 && this.y <= y2) {
+					return true;
+				}
+			}
+			return false;
+		},
+
+		print: function() {
+			console.log("Mouse Object: x"+this.x+", y"+this.y);
 		},
 	}
 }
