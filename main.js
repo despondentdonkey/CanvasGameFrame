@@ -1,6 +1,6 @@
 var c, //Canvas 2D Api Canvas
 glCanvas, //WebGL Canvas
-keys = Keyboard(); //Keyboard manager
+keys = Keyboard(), //Keyboard manager
 mouse = Mouse(); //Mouse manager
 
 Engine.update = function() {
@@ -16,7 +16,7 @@ Engine.update = function() {
 
 	keys.update(); //These need to be called last in order for the pressed/released functions to work.
 	mouse.update();
-}
+};
 
 $(document).ready(function() {
 	//Create our canvases, specify the canvas id and then if you want WebGL.
@@ -44,13 +44,13 @@ $(document).ready(function() {
 			gc.strokeText("Yo this is text", 0, 0);
 			gc.fillText("Yo this is text", 0, 0);
 		gc.lineWidth = 1;
-	}
+	};
 
 	glCanvas.render = function() {
 		var gl = glCanvas.getContext();
 		gl.clearColor(0, 1, 0, 1);
 		gl.clear(gl.COLOR_BUFFER_BIT);
-	}
+	};
 
 	Engine.init(60); //Initialize the engine and make it sync to 60 fps.
 
