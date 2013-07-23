@@ -3,7 +3,7 @@ glCanvas, //WebGL Canvas
 keys = Keyboard(), //Keyboard manager
 mouse = Mouse(); //Mouse manager
 
-Engine.update = function() {
+Loop.update = function() {
 	$("#fps").html("FPS: " + Time.fps + " | Delta: " + Time.delta);
 
 	if (keys.isDown('A')) {
@@ -52,11 +52,11 @@ $(document).ready(function() {
 		gl.clear(gl.COLOR_BUFFER_BIT);
 	};
 
-	Engine.init(60); //Initialize the engine and make it sync to 60 fps.
+	Loop.init(60); //Initialize the engine and make it sync to 60 fps.
 
 	//Add the canvases to the loop for rendering.
-	Engine.add(c);
-	Engine.add(glCanvas);
+	Loop.add(c);
+	Loop.add(glCanvas);
 
-	Engine.run(); //Starts the loop.
+	Loop.run(); //Starts the loop.
 });

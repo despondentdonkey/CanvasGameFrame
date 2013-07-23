@@ -91,31 +91,31 @@ function Canvas(canvasID, _useWebGL) {
     }
 }
 
-function Engine() {'use strict';} //Handles the loop since Javascript doesn't offer threading. 
+function Loop() {'use strict';} //Handles the loop since Javascript doesn't offer threading. 
 
-Engine.canvasList = new Array();
+Loop.canvasList = new Array();
 
 //Initializes everything needed before you start the loop.
-Engine.init = function(frameRate) {
+Loop.init = function(frameRate) {
 	//Default values
-	Engine.frameRate = typeof frameRate !== "undefined" ? frameRate : 60;
+	Loop.frameRate = typeof frameRate !== "undefined" ? frameRate : 60;
 }
 
-Engine.add = function(canvas) {
-	Engine.canvasList.push(canvas);
+Loop.add = function(canvas) {
+	Loop.canvasList.push(canvas);
 }
 
 //This is pretty much the loop. 
-Engine.run = function() {
-	Engine.update();
+Loop.run = function() {
+	Loop.update();
 	Time.update();
 
-	for (var i=0; i<Engine.canvasList.length; ++i) {
-		Engine.canvasList[i].render();
+	for (var i=0; i<Loop.canvasList.length; ++i) {
+		Loop.canvasList[i].render();
 	}
 
-	setTimeout(Engine.run, 1000/Engine.frameRate); //Executes this function again after the time has passed which causes a synced loop to occur.
+	setTimeout(Loop.run, 1000/Loop.frameRate); //Executes this function again after the time has passed which causes a synced loop to occur.
 }
 
 //These methods will be overridden.
-Engine.update = function() {}
+Loop.update = function() {}
