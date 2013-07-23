@@ -1,8 +1,9 @@
 CanvasGameFrame
 ===============
 
-A framework to create a JS game engine out of.
+Allows you to get straight to the rendering with either the 2D api or WebGL. It also provides useful loop and time
+functions for games. 
 
-Requires the latest version of Jquery.
+Requires the latest version of jQuery.
 
 index.html and main.js are used for testing. 
