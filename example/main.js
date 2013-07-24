@@ -28,9 +28,17 @@ $(document).ready(function() {
 	keys.attach(glCanvas.getElement());
 	mouse.attach(c.getElement());
 
+	var cur = new Image();
+	cur.src = "cursor.png";
+
+	var rings = new Image();
+	rings.src = "Rings_28x30_strip7.png";
+
+	var greg = Graphic(cur);
+	var ringAnim = Animation(rings, 28, 30);
+
 	c.render = function() {
 		var gc = c.getContext();
-
 		gc.fillStyle = "#0050FF";
 		c.clear();
 
@@ -44,6 +52,9 @@ $(document).ready(function() {
 			gc.strokeText("Yo this is text", 0, 0);
 			gc.fillText("Yo this is text", 0, 0);
 		gc.lineWidth = 1;
+
+		greg.render(gc);
+		ringAnim.render(gc, Time.delta);
 	};
 
 	glCanvas.render = function() {
