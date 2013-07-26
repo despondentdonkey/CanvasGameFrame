@@ -16,7 +16,7 @@ function vec4(_x, _y, _z, _w) {
 	}
 }
 
-function Rectangle(_x, _y, _width, _height) {
+function Rect(_x, _y, _width, _height) {
     return {
         x: _x, y: _y, width: _width, height: _height,
     }
