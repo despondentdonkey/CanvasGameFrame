@@ -1,3 +1,24 @@
+function NineSlice(image) {
+    var img = image;
+    return {
+        topLeft:undefined, top:undefined, topRight:undefined, 
+        right:undefined, bottomRight:undefined, bottom:undefined, 
+        bottomLeft:undefined, left:undefined, center:undefined,
+
+        render: function(gc, x, y, width, height) {
+            gc.drawImage(img, this.left.x, this.left.y, this.left.width, this.left.height, x, y+this.topLeft.height, this.left.width, height-this.bottomLeft.height); //Left
+            gc.drawImage(img, this.top.x, this.top.y, this.top.width, this.top.height, x+this.topLeft.width, y, width-this.topRight.width, this.top.height); //Top
+            gc.drawImage(img, this.right.x, this.right.y, this.right.width, this.right.height, x+width, y+this.topRight.width, this.right.width, height-this.bottomRight.height); //Right
+            gc.drawImage(img, this.bottom.x, this.bottom.y, this.bottom.width, this.bottom.height, x+this.bottomLeft.width, y+height, width-this.bottomRight.width, this.bottom.height); //Bottom
+            gc.drawImage(img, this.topLeft.x, this.topLeft.y, this.topLeft.width, this.topLeft.height, x, y, this.topLeft.width, this.topLeft.height); //TopLeft
+            gc.drawImage(img, this.topRight.x, this.topRight.y, this.topRight.width, this.topRight.height, x+width, y, this.topRight.width, this.topRight.height); //TopRight
+            gc.drawImage(img, this.bottomRight.x, this.bottomRight.y, this.bottomRight.width, this.bottomRight.height, x+width, y+height, this.bottomRight.width, this.bottomRight.height); //BottomRight
+            gc.drawImage(img, this.bottomLeft.x, this.bottomLeft.y, this.bottomLeft.width, this.bottomLeft.height, x, y+height, this.bottomRight.width, this.bottomRight.height); //BottomLeft
+            gc.drawImage(img, this.center.x, this.center.y, this.center.width, this.center.height, x+this.left.width, y+this.top.height, width-this.right.width, height-this.bottom.height); //Center
+        },
+    }
+}
+
 function Graphic(image) {
     var img = image;
     return {
