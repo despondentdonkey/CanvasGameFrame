@@ -1,7 +1,8 @@
-var c, //Canvas 2D Api Canvas
-glCanvas, //WebGL Canvas
-keys = Keyboard(), //Keyboard manager
-mouse = Mouse(); //Mouse manager
+var c; //Canvas 2D Api Canvas
+var glCanvas; //WebGL Canvas
+var keys = Keyboard(); //Keyboard manager
+var mouse = Mouse(); //Mouse manager
+var loader = Loader(); //Asset manager
 
 Loop.update = function() {
 	$("#fps").html("FPS: " + Time.fps + " | Delta: " + Time.delta);
@@ -28,11 +29,8 @@ $(document).ready(function() {
 	keys.attach(glCanvas.getElement());
 	mouse.attach(c.getElement());
 
-	var cur = new Image();
-	cur.src = "cursor.png";
-
-	var rings = new Image();
-	rings.src = "Rings_28x30_strip7.png";
+	var cur = loader.image("cursor.png");
+	var rings = loader.image("Rings_28x30_strip7.png");
 
 	var greg = Graphic(cur);
 	var ringAnim = Animation(rings, 28, 30);
@@ -69,5 +67,9 @@ $(document).ready(function() {
 	Loop.add(c);
 	Loop.add(glCanvas);
 
-	Loop.run(); //Starts the loop.
+	loader.load(onAssetLoad);
 });
+
+function onAssetLoad() {
+	Loop.run();
+}
