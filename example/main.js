@@ -35,6 +35,19 @@ $(document).ready(function() {
 	var greg = Graphic(cur);
 	var ringAnim = Animation(rings, 28, 30);
 
+	var menuImg = loader.image("menu.png");
+	var nineSl = NineSlice(menuImg);
+
+	nineSl.topLeft = Rect(0, 0, 6, 5);
+	nineSl.top = Rect(6, 0, 52, 5);
+	nineSl.topRight = Rect(58, 0, 6, 6);
+	nineSl.right = Rect(58, 5, 6, 54);
+	nineSl.bottomRight = Rect(58, 59, 6, 5);
+	nineSl.bottom = Rect(6, 59, 52, 5);
+	nineSl.bottomLeft = Rect(0, 59, 6, 5);
+	nineSl.left = Rect(0, 5, 6, 54);
+	nineSl.center = Rect(6, 5, 52, 54);
+
 	c.render = function() {
 		var gc = c.getContext();
 		gc.fillStyle = "#0050FF";
@@ -50,6 +63,8 @@ $(document).ready(function() {
 			gc.strokeText("Yo this is text", 0, 0);
 			gc.fillText("Yo this is text", 0, 0);
 		gc.lineWidth = 1;
+
+		nineSl.render(gc, 0, 0, 200, 200);
 
 		greg.render(gc);
 		ringAnim.render(gc, Time.delta);
