@@ -5,5 +5,3 @@ Allows you to get straight to the rendering with either the 2D api or WebGL. It 
 functions for games. 
 
 Requires the latest version of jQuery.
-
-index.html and main.js are used for testing. 
