@@ -87,8 +87,8 @@ function Mouse() {
 	released = [],
 	releasedCount = 0,
 
-	clX = 0,
-	clY = 0,
+	pX = 0,
+	pY = 0,
 	oX = 0,
 	oY = 0;
 
@@ -111,13 +111,13 @@ function Mouse() {
 				releasedCount--;
 				released[releasedCount] = -1;
 			}
-		    this.x = clX - oX; 
-		    this.y = clY - oY;
+		    this.x = pX - oX;
+		    this.y = pY - oY;
 		},
 
 		onMouseMove: function(e) {
-			clX = e.clientX;
-			clY = e.clientY;
+			pX = e.pageX;
+			pY = e.pageY;
 			oX = $(e.target).offset().left; //MUST USE THIS VERSION. offsetX/Y doens't work in Firefox.
 			oY = $(e.target).offset().top;
 		},
@@ -143,7 +143,7 @@ function Mouse() {
 		getX: function(client) {
 			var cl = typeof client !== "undefined" ? client : false;
 			if (cl)
-				return clX;
+				return pX;
 			else
 				return this.x;
 		},
@@ -151,7 +151,7 @@ function Mouse() {
 		getY: function(client) {
 			var cl = typeof client !== "undefined" ? client : false;
 			if (cl)
-				return clY;
+				return pY;
 			else
 				return this.y;
 		},
