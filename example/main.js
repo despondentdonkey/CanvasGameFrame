@@ -4,6 +4,8 @@ var keys = Keyboard(); //Keyboard manager
 var mouse = Mouse(); //Mouse manager
 var loader = Loader(); //Asset manager
 
+var ringAnim;
+
 Loop.update = function() {
 	$("#fps").html("FPS: " + Time.fps + " | Delta: " + Time.delta);
 
@@ -14,6 +16,8 @@ Loop.update = function() {
 	if (mouse.isPressed(Mouse.LEFT)) {
 		mouse.print();
 	}
+
+	ringAnim.update(Time.delta);
 
 	keys.update(); //These need to be called last in order for the pressed/released functions to work.
 	mouse.update();
@@ -33,7 +37,7 @@ $(document).ready(function() {
 	var rings = loader.image("Rings_28x30_strip7.png");
 
 	var greg = Graphic(cur);
-	var ringAnim = Animation(rings, 28, 30);
+	ringAnim = Animation(rings, 28, 30);
 
 	var menuImg = loader.image("menu.png");
 	var nineSl = NineSlice(menuImg);
@@ -67,7 +71,7 @@ $(document).ready(function() {
 		nineSl.render(gc, 0, 0, 200, 200);
 
 		greg.render(gc);
-		ringAnim.render(gc, Time.delta);
+		ringAnim.render(gc);
 	};
 
 	glCanvas.render = function() {

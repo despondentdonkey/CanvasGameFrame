@@ -41,9 +41,11 @@ function Graphic(image) {
         getImage: function() {
             return img;
         },
+        
         getWidth: function() {
             return img.width;
         },
+
         getHeight: function() {
             return img.height;
         },
@@ -60,17 +62,7 @@ function Animation(image, _cellWidth, _cellHeight) {
     timer = 0,
     speed = 1;
 
-    base.render = function(gc, delta) {
-        var img = base.getImage();
-        cells = img.width / cellWidth - 1; //For some reason base.img won't work in the constructor.
-        
-        gc.save();
-        gc.translate(base.x, base.y);
-        gc.rotate(base.angle*(Math.PI/180));
-        gc.drawImage(img, cell*cellWidth, 0, cellWidth, cellHeight, -base.originX, -base.originY, cellWidth * base.scaleX, cellHeight * base.scaleY);
-        gc.rotate(0);
-        gc.restore();
-        
+    base.update = function(delta) {
         if (timer >= delta) {
             if (cell < cells) {
                 cell++;
@@ -81,6 +73,18 @@ function Animation(image, _cellWidth, _cellHeight) {
         } else {
             timer += delta * speed;
         }
+    };
+
+    base.render = function(gc) {
+        var img = base.getImage();
+        cells = img.width / cellWidth - 1; //For some reason base.img won't work in the constructor.
+        
+        gc.save();
+        gc.translate(base.x, base.y);
+        gc.rotate(base.angle*(Math.PI/180));
+        gc.drawImage(img, cell*cellWidth, 0, cellWidth, cellHeight, -base.originX, -base.originY, cellWidth * base.scaleX, cellHeight * base.scaleY);
+        gc.rotate(0);
+        gc.restore();
     };
 
     base.getWidth = function() {
