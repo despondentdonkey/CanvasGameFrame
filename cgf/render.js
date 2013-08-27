@@ -62,11 +62,16 @@ function Animation(image, _cellWidth, _cellHeight) {
     timer = 0,
     speed = 1;
 
+    base.onComplete = undefined;
+
     base.update = function(delta) {
         if (timer >= delta) {
             if (cell < cells) {
                 cell++;
             } else {
+                if (base.onComplete) {
+                    base.onComplete();
+                }
                 cell = 0;
             }
             timer = 0;
