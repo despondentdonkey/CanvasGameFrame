@@ -4,23 +4,45 @@ function Loader() {
     var assets = [];
     var loaded = 0;
 
-    return {
-        add: function(asset) {
-            assets.push(asset);
-        },
+    var add = function(asset) {
+        assets.push(asset);
+    };
 
+    return {
         image: function(src) {
             var newImage = new Image();
             newImage.src = src;
-            this.add(newImage);
+            add(newImage);
             return newImage;
         },
 
         audio: function(src) {
             var newAudio = new Audio();
             newAudio.src = src;
-            this.add(newAudio);
+            add(newAudio);
             return newAudio;
+        },
+
+        xml: {
+                load: function(url, file) {
+                    var filepath = url + "/" + file;
+                    console.log(filepath);
+                    var jqxhr = $.ajax({
+                        url: filepath,
+                        beforeSend: function(xhr) {
+                            xhr.overrideMimeType("application/xml; charset=utf-8");
+                        }
+                    }).success(function(data) {
+                        alert("data loaded!");
+                        return data;
+                    }).error(function(data) {
+                        console.error("Error loading xml data from " + url);
+                    });
+                },
+
+                toJSON: function(xml) {
+
+                }
         },
 
         //Call this when the document has been loaded. Specify a callback function to continue after the assets have been loaded.
@@ -42,6 +64,6 @@ function Loader() {
                     });
                 }
             }
-        },
-    }
+        }
+    };
 }
