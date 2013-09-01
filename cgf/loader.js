@@ -23,26 +23,22 @@ function Loader() {
             return newAudio;
         },
 
-        xml: {
-                load: function(url, file) {
-                    var filepath = url + "/" + file;
-                    console.log(filepath);
-                    var jqxhr = $.ajax({
-                        url: filepath,
-                        beforeSend: function(xhr) {
-                            xhr.overrideMimeType("application/xml; charset=utf-8");
-                        }
-                    }).success(function(data) {
-                        alert("data loaded!");
-                        return data;
-                    }).error(function(data) {
-                        console.error("Error loading xml data from " + url);
-                    });
-                },
-
-                toJSON: function(xml) {
-
-                }
+        // Loads XML file and converts to JSON via AJAX and $.xml2json jquery plugin
+        // Calls callback when loading has finished.
+        json: {
+            load: function(filepath, callback) {
+                $.ajax({
+                    url: filepath,
+                    beforeSend: function(xhr) {
+                        xhr.overrideMimeType("application/xml; charset=utf-8");
+                    }
+                }).fail(function(data) {
+                    console.error("Error loading XML data from " + url);
+                }).done(function(data) {
+                    var obj = $.xml2json(data);
+                    return callback(obj);
+                });
+            }
         },
 
         //Call this when the document has been loaded. Specify a callback function to continue after the assets have been loaded.
