@@ -43,20 +43,22 @@ function Loader() {
 
         //Call this when the document has been loaded. Specify a callback function to continue after the assets have been loaded.
         load: function(callback) {
+            var loadComplete = function(cb) {
+                if (loaded >= assets.length) {
+                    cb();
+                }
+            };
+
             for (var i=0; i<assets.length; i++) {
                 if (assets[i] instanceof Image) {
                     $(assets[i]).load(function() {
                         loaded++;
-                        if (loaded >= assets.length) {
-                            callback();
-                        }
+                        loadComplete(callback);
                     });
                 } else if (assets[i] instanceof Audio) {
                     $(assets[i]).on('canplay oncanplaythrough', function() {
                         loaded++;
-                        if (loaded >= assets.length) {
-                            callback();
-                        }
+                        loadComplete(callback);
                     });
                 }
             }
