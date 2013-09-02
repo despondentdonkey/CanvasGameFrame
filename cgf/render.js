@@ -14,7 +14,7 @@ function NineSlice(image) {
             gc.drawImage(img, this.topRight.x, this.topRight.y, this.topRight.width, this.topRight.height, x+width, y, this.topRight.width, this.topRight.height); //TopRight
             gc.drawImage(img, this.bottomRight.x, this.bottomRight.y, this.bottomRight.width, this.bottomRight.height, x+width, y+height, this.bottomRight.width, this.bottomRight.height); //BottomRight
             gc.drawImage(img, this.bottomLeft.x, this.bottomLeft.y, this.bottomLeft.width, this.bottomLeft.height, x, y+height, this.bottomRight.width, this.bottomRight.height); //BottomLeft
-            gc.drawImage(img, this.center.x, this.center.y, this.center.width, this.center.height, x+this.left.width, y+this.top.height, width-this.left.width, height-this.top.height); //Center
+            if (this.center) gc.drawImage(img, this.center.x, this.center.y, this.center.width, this.center.height, x+this.left.width, y+this.top.height, width-this.left.width, height-this.top.height); //Center
         },
     }
 }
