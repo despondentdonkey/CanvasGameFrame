@@ -7,6 +7,20 @@ function Loader() {
     var add = function(asset) {
         assets.push(asset);
     };
+    
+    // Returns an object used for loading levels.
+    var getLevelObj = function(type, filepath, callback) {
+        // Return an object to pass filepath
+        return {
+            // Callback function to assign data to a container (or anything else, really)
+            callback: function(obj) {
+                return callback(obj);
+            },
+            filepath: filepath,
+            type: type
+        };
+    };
+        
 
     return {
         image: function(src) {
@@ -23,18 +37,17 @@ function Loader() {
             return newAudio;
         },
 
+        // Queues XML for loading
+        xml: function(filepath, callback) {
+            add(function() {
+                return getLevelObj("xml", filepath, callback);
+            });
+        },
+        
         // Queues JSON for loading
         json: function(filepath, callback) {
-            // add function to assets to check for function in Loader.load
             add(function() {
-                // Return an object to pass filepath
-                return {
-                    // Callback function to assign data to a container (or anything else, really)
-                    callback: function(obj) {
-                        return callback(obj);
-                    },
-                    filepath: filepath
-                };
+                return getLevelObj("json", filepath, callback);
             });
         },
 
@@ -61,21 +74,39 @@ function Loader() {
                 // Calls callback when loading has finished.
                 } else if (assets[i] instanceof Function) {
                     var lvlObj = assets[i]();
-                    $.ajax({
-                        url: lvlObj.filepath,
-                        beforeSend: function(xhr) {
-                            // Force mime type to xml (oel is typically unrecognized as xml)
-                            xhr.overrideMimeType("application/xml; charset=utf-8");
-                        }
-                    }).fail(function(data) {
-                        console.error("Error loading XML data from " + this.url);
-                    }).done(function(data) {
-                        var obj = $.xml2json(data);
-                        lvlObj.callback(obj);
-                        loaded++;
-                        loadComplete(callback);
-                    });
-
+                    /*
+                    if (!lvlObj || !lvlObj.type || (typeof lvlObj.type !== "string")) {
+                        console.error("Error @ Loader.load: Level object does not exist or the type provided is invalid.");
+                        return;
+                    }*/
+                    if (lvlObj.type.toLowerCase() === "xml") {
+                        $.ajax({
+                            url: lvlObj.filepath,
+                            beforeSend: function(xhr) {
+                                // Force mime type to xml (oel is typically unrecognized as xml)
+                                xhr.overrideMimeType("application/xml; charset=utf-8");
+                            }
+                        }).fail(function(data) {
+                            console.error("Error loading XML data from " + this.url);
+                        }).done(function(data) {
+                            var obj = $.xml2json(data);
+                            lvlObj.callback(obj);
+                            loaded++;
+                            loadComplete(callback);
+                        });
+                    } else if (lvlObj.type.toLowerCase() === "json") {
+                        $.ajax({
+                            url: lvlObj.filepath,
+                            dataType: "json"
+                        }).fail(function(data) {
+                            console.error("Error loading JSON data from " + this.url);
+                        }).done(function(data) {
+                            var obj = $.parseJSON(data);
+                            lvlObj.callback(obj);
+                            loaded++;
+                            loadComplete(callback);
+                        });
+                    }
                 }
             }
         }
