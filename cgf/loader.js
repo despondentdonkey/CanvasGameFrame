@@ -56,7 +56,7 @@ function Loader() {
             var loadComplete = function(cb) {
                 loaded++;
                 if (loaded >= assets.length) {
-                    if (BPM.debug) console.log("*************LOAD COMPLETE");
+                    //if (BPM.debug) console.log("*************LOAD COMPLETE");
                     cb();
                 }
             };
