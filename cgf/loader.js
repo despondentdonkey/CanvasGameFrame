@@ -12,12 +12,12 @@ function Loader() {
     var getLevelObj = function(type, filepath, callback) {
         // Return an object to pass filepath
         return {
+            filepath: filepath,
+            type: type,
             // Callback function to assign data to a container (or anything else, really)
             callback: function(obj) {
                 return callback(obj);
-            },
-            filepath: filepath,
-            type: type
+            }
         };
     };
         
@@ -54,7 +54,9 @@ function Loader() {
         //Call this when the document has been loaded. Specify a callback function to continue after the assets have been loaded.
         load: function(callback) {
             var loadComplete = function(cb) {
+                loaded++;
                 if (loaded >= assets.length) {
+                    if (BPM.debug) console.log("*************LOAD COMPLETE");
                     cb();
                 }
             };
@@ -62,26 +64,24 @@ function Loader() {
             for (var i=0; i<assets.length; i++) {
                 if (assets[i] instanceof Image) {
                     $(assets[i]).load(function() {
-                        loaded++;
                         loadComplete(callback);
                     });
                 } else if (assets[i] instanceof Audio) {
                     $(assets[i]).on('canplay oncanplaythrough', function() {
-                        loaded++;
                         loadComplete(callback);
                     });
                 // Loads XML file and converts to JSON via AJAX and $.xml2json jquery plugin
                 // Calls callback when loading has finished.
                 } else if (assets[i] instanceof Function) {
                     var lvlObj = assets[i]();
-                    /*
                     if (!lvlObj || !lvlObj.type || (typeof lvlObj.type !== "string")) {
                         console.error("Error @ Loader.load: Level object does not exist or the type provided is invalid.");
                         return;
-                    }*/
+                    }
                     if (lvlObj.type.toLowerCase() === "xml") {
                         $.ajax({
                             url: lvlObj.filepath,
+                            dataType: "xml",
                             beforeSend: function(xhr) {
                                 // Force mime type to xml (oel is typically unrecognized as xml)
                                 xhr.overrideMimeType("application/xml; charset=utf-8");
@@ -91,7 +91,6 @@ function Loader() {
                         }).done(function(data) {
                             var obj = $.xml2json(data);
                             lvlObj.callback(obj);
-                            loaded++;
                             loadComplete(callback);
                         });
                     } else if (lvlObj.type.toLowerCase() === "json") {
@@ -101,12 +100,12 @@ function Loader() {
                         }).fail(function(data) {
                             console.error("Error loading JSON data from " + this.url);
                         }).done(function(data) {
-                            var obj = $.parseJSON(data);
-                            lvlObj.callback(obj);
-                            loaded++;
+                            lvlObj.callback(data);
                             loadComplete(callback);
                         });
                     }
+                } else {
+                    console.error("Error @ Loader.load: Unknown asset type.");
                 }
             }
         }
