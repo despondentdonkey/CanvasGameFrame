@@ -27,17 +27,17 @@ function Loader() {
             return newAudio;
         },
 
-        addFile: function(id, fileName) {
+        addFile: function(id, path) {
             files.push({
                 id: id,
-                fileName: fileName
+                path: path
             });
         },
 
         getFile: function(id) {
             for (var i in loadedFiles) {
                 if (loadedFiles[i].id === id) {
-                    return loadedFiles[i].data;
+                    return loadedFiles[i];
                 }
             }
         },
@@ -66,11 +66,12 @@ function Loader() {
 
             for (var i in files) {     
                 $.ajax({
-                    url : files[i].fileName,
+                    url : files[i].path,
                     dataType: "text",
                 }).done(function(data) {
                     loadedFiles.push({
                         id: files[loadedFileCount].id, //Use loaded because i is set to the last value at this point for some reason.
+                        path: files[loadedFileCount].path,
                         data: data
                     });
 
