@@ -4,10 +4,9 @@ function Loader() {
     var assets = [];
     var loaded = 0;
 
-    //TESTS
-    var jsonAssets = [];
-    var jsonLoadedAssets = [];
-    var jsonLoaded = 0;
+    var files = [];
+    var loadedFiles = [];
+    var loadedFileCount = 0;
 
     var add = function(asset) {
         assets.push(asset);
@@ -28,17 +27,17 @@ function Loader() {
             return newAudio;
         },
 
-        addJSON: function(id, fileName) {
-            jsonAssets.push({
+        addFile: function(id, fileName) {
+            files.push({
                 id: id,
                 fileName: fileName
             });
         },
 
-        getJSON: function(id) {
-            for (var i in jsonLoadedAssets) {
-                if (jsonLoadedAssets[i].id === id) {
-                    return jsonLoadedAssets[i].data;
+        getFile: function(id) {
+            for (var i in loadedFiles) {
+                if (loadedFiles[i].id === id) {
+                    return loadedFiles[i].data;
                 }
             }
         },
@@ -46,7 +45,7 @@ function Loader() {
         //Call this when the document has been loaded. Specify a callback function to continue after the assets have been loaded.
         load: function(callback) {
             var loadComplete = function(cb) {
-                if (loaded >= assets.length && jsonLoaded >= jsonAssets.length) {
+                if (loaded >= assets.length && loadedFileCount >= files.length) {
                     cb();
                 }
             };
@@ -65,17 +64,17 @@ function Loader() {
                 }
             }
 
-            for (var i in jsonAssets) {     
+            for (var i in files) {     
                 $.ajax({
-                    url : jsonAssets[i].fileName,
+                    url : files[i].fileName,
                     dataType: "text",
                 }).done(function(data) {
-                    jsonLoadedAssets.push({
-                        id: jsonAssets[jsonLoaded].id, //Use loaded because i is set to the last value at this point for some reason.
+                    loadedFiles.push({
+                        id: files[loadedFileCount].id, //Use loaded because i is set to the last value at this point for some reason.
                         data: data
                     });
 
-                    jsonLoaded++;
+                    loadedFileCount++;
                     loadComplete(callback);
                 });
             }
