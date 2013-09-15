@@ -6,7 +6,6 @@ function Loader() {
 
     var files = [];
     var loadedFiles = [];
-    var loadedFileCount = 0;
 
     var add = function(asset) {
         assets.push(asset);
@@ -27,25 +26,20 @@ function Loader() {
             return newAudio;
         },
 
-        addFile: function(id, path) {
+        file: function(id, path, callback) {
             files.push({
                 id: id,
-                path: path
-            });
-        },
-
-        getFile: function(id) {
-            for (var i in loadedFiles) {
-                if (loadedFiles[i].id === id) {
-                    return loadedFiles[i];
+                path: path,
+                callback: function(data) {
+                    return callback(id, path, data);
                 }
-            }
+            });
         },
 
         //Call this when the document has been loaded. Specify a callback function to continue after the assets have been loaded.
         load: function(callback) {
             var loadComplete = function(cb) {
-                if (loaded >= assets.length && loadedFileCount >= files.length) {
+                if (loaded >= assets.length && loadedFiles.length >= files.length) {
                     cb();
                 }
             };
@@ -69,13 +63,14 @@ function Loader() {
                     url : files[i].path,
                     dataType: "text",
                 }).done(function(data) {
+                    // Refer to length of loadedFiles array for current file
+                    var loadedCount = loadedFiles.length;
                     loadedFiles.push({
-                        id: files[loadedFileCount].id, //Use loaded because i is set to the last value at this point for some reason.
-                        path: files[loadedFileCount].path,
+                        id: files[loadedCount].id,
+                        path: files[loadedCount].path,
                         data: data
                     });
-
-                    loadedFileCount++;
+                    files[loadedCount].callback(data);
                     loadComplete(callback);
                 });
             }
