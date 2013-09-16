@@ -5,10 +5,34 @@ function Loader() {
     var loaded = 0;
 
     var files = [];
-    var loadedFiles = [];
 
     var add = function(asset) {
         assets.push(asset);
+    };
+
+    /* parse
+        Parses text to supported file type based on given file path.
+
+        Supported types
+            json - jQuery.parseJSON
+            xml - $.xml2json plugin
+    */
+    var parse = function(filepath, data) {
+        var types = {
+            "json": $.parseJSON,
+            "xml": $.xml2json,
+            "oel": $.xml2json
+        };
+
+        for (var t in types) {
+            var ext = filepath.slice(-t.length);
+            console.log(ext + " " + typeof -t.length);
+            console.log(t);
+            if (ext === t) {
+                console.log("Boom. " + types[t]);
+                return types[t](data);
+            }
+        }
     };
 
     return {
@@ -39,7 +63,8 @@ function Loader() {
         //Call this when the document has been loaded. Specify a callback function to continue after the assets have been loaded.
         load: function(callback) {
             var loadComplete = function(cb) {
-                if (loaded >= assets.length && loadedFiles.length >= files.length) {
+                loaded++;
+                if (loaded >= (assets.length + files.length)) {
                     cb();
                 }
             };
@@ -47,36 +72,27 @@ function Loader() {
             for (var i=0; i<assets.length; i++) {
                 if (assets[i] instanceof Image) {
                     $(assets[i]).load(function() {
-                        loaded++;
                         loadComplete(callback);
                     });
                 } else if (assets[i] instanceof Audio) {
                     $(assets[i]).on('canplay oncanplaythrough', function() {
-                        loaded++;
                         loadComplete(callback);
                     });
                 }
             }
 
             for (var i in files) {
-                console.log("LOADING " + files[i].path);
-                console.log(files[i]);
                 $.ajax({
-                    //TODO: Add converter here to auto convert json, xml
                     url : files[i].path,
                     dataType: "text",
-                }).done(function(data) {
-                    // Refer to length of loadedFiles array for current file
-                    var loadedCount = loadedFiles.length;
-                    console.log("LOADING FINISHED " + files[loadedCount].id + " " + files[loadedCount].path);
-                    console.log(data.substring(10));
-                    loadedFiles.push({
-                        id: files[loadedCount].id,
-                        path: files[loadedCount].path,
-                        data: data
-                    });
-                    console.log(loadedFiles);
-                    files[loadedCount].callback(data);
+                    beforeSend: function(xhr, settings) {
+                        // Store necessary file data in the xhr object
+                        xhr.fileData = files[i];
+                    }
+                }).done(function(data, status, xhr) {
+                    // Retrieve file data from xhr, parse loaded data
+                    data = parse(xhr.fileData.path, data);
+                    xhr.fileData.callback(data);
                     loadComplete(callback);
                 });
             }
