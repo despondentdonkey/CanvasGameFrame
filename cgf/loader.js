@@ -12,6 +12,7 @@ function Loader() {
 
     /* parse
         Parses text to supported file type based on given file path.
+        If file type not supported, returns plain text.
 
         Supported types
             json - jQuery.parseJSON
@@ -30,6 +31,8 @@ function Loader() {
                 return types[t](data);
             }
         }
+        
+        return data;
     };
 
     return {
