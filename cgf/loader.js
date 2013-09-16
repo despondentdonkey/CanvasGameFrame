@@ -26,10 +26,7 @@ function Loader() {
 
         for (var t in types) {
             var ext = filepath.slice(-t.length);
-            console.log(ext + " " + typeof -t.length);
-            console.log(t);
             if (ext === t) {
-                console.log("Boom. " + types[t]);
                 return types[t](data);
             }
         }
