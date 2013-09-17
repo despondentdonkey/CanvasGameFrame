@@ -10,31 +10,6 @@ function Loader() {
         assets.push(asset);
     };
 
-    /* parse
-        Parses text to supported file type based on given file path.
-        If file type not supported, returns plain text.
-
-        Supported types
-            json - jQuery.parseJSON
-            xml - $.xml2json plugin
-    */
-    var parse = function(filepath, data) {
-        var types = {
-            "json": $.parseJSON,
-            "xml": $.xml2json,
-            "oel": $.xml2json
-        };
-
-        for (var t in types) {
-            var ext = filepath.slice(-t.length);
-            if (ext === t) {
-                return types[t](data);
-            }
-        }
-        
-        return data;
-    };
-
     return {
         image: function(src) {
             var newImage = new Image();
@@ -63,11 +38,10 @@ function Loader() {
                 boolean. true to parse data by file extension
                 supported file types are in parse function
         */
-        file: function(id, path, callback, parse) {
+        file: function(id, path, callback) {
             files.push({
                 id: id,
                 path: path,
-                parse: parse,
                 callback: function(data) {
                     return callback(id, path, data);
                 }
@@ -105,9 +79,6 @@ function Loader() {
                     }
                 }).done(function(data, status, xhr) {
                     // Retrieve file data from xhr, parse loaded data
-                    if (files[i].parse) {
-                        data = parse(xhr.fileData.path, data);
-                    }
                     xhr.fileData.callback(data);
                     loadComplete(callback);
                 });
