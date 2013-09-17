@@ -50,10 +50,24 @@ function Loader() {
             return newAudio;
         },
 
-        file: function(id, path, callback) {
+        /* loader.file
+            Loads file via ajax. callback called on load complete.
+            
+            id
+                preferrably string id of file
+            path
+                full file path of file
+            callback
+                called when file is loaded.
+            parse
+                boolean. true to parse data by file extension
+                supported file types are in parse function
+        */
+        file: function(id, path, callback, parse) {
             files.push({
                 id: id,
                 path: path,
+                parse: parse,
                 callback: function(data) {
                     return callback(id, path, data);
                 }
@@ -91,7 +105,9 @@ function Loader() {
                     }
                 }).done(function(data, status, xhr) {
                     // Retrieve file data from xhr, parse loaded data
-                    data = parse(xhr.fileData.path, data);
+                    if (files[i].parse) {
+                        data = parse(xhr.fileData.path, data);
+                    }
                     xhr.fileData.callback(data);
                     loadComplete(callback);
                 });
