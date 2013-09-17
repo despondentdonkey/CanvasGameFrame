@@ -43,7 +43,7 @@ function Loader() {
                 id: id,
                 path: path,
                 callback: function(data) {
-                    return callback(id, path, data);
+                    return callback(id, data);
                 }
             });
         },
