@@ -5,7 +5,7 @@ function NineSlice(image) {
         right:undefined, bottomRight:undefined, bottom:undefined, 
         bottomLeft:undefined, left:undefined, center:undefined,
 
-        copyDimensions: function(slices) {
+        copyDimensions: function(slice) {
             this.topLeft = slice.topLeft;
             this.top = slice.top;
             this.topRight = slice.topRight;
