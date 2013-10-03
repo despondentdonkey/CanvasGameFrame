@@ -5,6 +5,18 @@ function NineSlice(image) {
         right:undefined, bottomRight:undefined, bottom:undefined, 
         bottomLeft:undefined, left:undefined, center:undefined,
 
+        copyDimensions: function(slices) {
+            this.topLeft = slice.topLeft;
+            this.top = slice.top;
+            this.topRight = slice.topRight;
+            this.right = slice.right;
+            this.bottomRight = slice.bottomRight;
+            this.bottom = slice.bottom;
+            this.bottomLeft = slice.bottomLeft;
+            this.left = slice.left;
+            this.center = slice.center;
+        },
+
         render: function(gc, x, y, width, height) {
             gc.drawImage(img, this.left.x, this.left.y, this.left.width, this.left.height, x, y+this.topLeft.height, this.left.width, height-this.topLeft.height); //Left
             gc.drawImage(img, this.top.x, this.top.y, this.top.width, this.top.height, x+this.topLeft.width, y, width-this.topLeft.width, this.top.height); //Top
