@@ -1,9 +1,12 @@
 function NineSlice(image) {
     var img = image;
     return {
-        topLeft:undefined, top:undefined, topRight:undefined, 
-        right:undefined, bottomRight:undefined, bottom:undefined, 
+        topLeft:undefined, top:undefined, topRight:undefined,
+        right:undefined, bottomRight:undefined, bottom:undefined,
         bottomLeft:undefined, left:undefined, center:undefined,
+
+        cached: false,
+        cache: undefined,
 
         copyDimensions: function(slice) {
             this.topLeft = slice.topLeft;
@@ -27,6 +30,20 @@ function NineSlice(image) {
             gc.drawImage(img, this.bottomRight.x, this.bottomRight.y, this.bottomRight.width, this.bottomRight.height, x+width, y+height, this.bottomRight.width, this.bottomRight.height); //BottomRight
             gc.drawImage(img, this.bottomLeft.x, this.bottomLeft.y, this.bottomLeft.width, this.bottomLeft.height, x, y+height, this.bottomRight.width, this.bottomRight.height); //BottomLeft
             if (this.center) gc.drawImage(img, this.center.x, this.center.y, this.center.width, this.center.height, x+this.left.width, y+this.top.height, width-this.left.width, height-this.top.height); //Center
+        },
+
+        renderCache: function(gc, x, y, width, height) {
+            if (!this.cached) {
+                var c = document.createElement('canvas');
+                var ctx = c.getContext('2d');
+
+                this.render(ctx, 0, 0, width, height);
+
+                this.cache = c;
+                this.cached = true;
+            }
+
+            gc.drawImage(this.cache, x, y);
         },
     }
 }
@@ -53,7 +70,7 @@ function Graphic(image) {
         getImage: function() {
             return img;
         },
-        
+
         getWidth: function() {
             return img.width;
         },
@@ -95,7 +112,7 @@ function Animation(image, _cellWidth, _cellHeight) {
     base.render = function(gc) {
         var img = base.getImage();
         cells = img.width / cellWidth - 1; //For some reason base.img won't work in the constructor.
-        
+
         gc.save();
         gc.translate(base.x, base.y);
         gc.rotate(base.angle*(Math.PI/180));
