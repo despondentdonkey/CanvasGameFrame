@@ -10,15 +10,15 @@ function Canvas(canvasID, _useWebGL) {
     var id = canvasID;
     var useWebGL = _useWebGL;
     var element = $("#" + id).get(0);
-    var context; 
+    var context;
 
     if (useWebGL) {
         context = element.getContext("webgl") || element.getContext("experimental-webgl");
         if (context) {
-            console.log("WebGL context found for " + id + "!"); 
+            console.log("WebGL context found for " + id + "!");
         } else {
             console.error("WebGL context not found for " + id + ".");
-        }   
+        }
     } else {
         context = element.getContext("2d");
         if (context) {
@@ -75,22 +75,16 @@ Runs the game loop, updates all canvases.
 
 */
 
-//Handles the loop since Javascript doesn't offer threading. 
+//Handles the loop since Javascript doesn't offer threading.
 Loop = {};
 
 Loop.canvasList = [];
-
-//Initializes everything needed before you start the loop.
-Loop.init = function(frameRate) {
-    //Default values
-    Loop.frameRate = typeof frameRate !== "undefined" ? frameRate : 60;
-};
 
 Loop.add = function(canvas) {
     Loop.canvasList.push(canvas);
 };
 
-//This is pretty much the loop. 
+//This is pretty much the loop.
 Loop.run = function() {
     Loop.update();
     Time.update();
@@ -99,7 +93,7 @@ Loop.run = function() {
         Loop.canvasList[i].render();
     }
 
-    setTimeout(Loop.run, 1000/Loop.frameRate); //Executes this function again after the time has passed which causes a synced loop to occur.
+    requestAnimationFrame(Loop.run); //Executes this function again after the time has passed which causes a synced loop to occur.
 };
 
 //These methods will be overridden.
@@ -112,10 +106,10 @@ Useful static methods for time.
 
 */
 
-Time = {}; //Keeps track of the frame rate and delta time. Also includes useful time functions. 
+Time = {}; //Keeps track of the frame rate and delta time. Also includes useful time functions.
 
 Time.fps = 0; // Dynamic value containing the frame rate.
-Time.delta = 0; // Dynamic value containing the time that passes each frame. 
+Time.delta = 0; // Dynamic value containing the time that passes each frame.
 
 Time.lastFPS = (new Date()).getTime();
 Time.fpsCounter = 0;
