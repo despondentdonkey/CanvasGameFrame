@@ -6,6 +6,9 @@ var loader = Loader(); //Asset manager
 
 var ringAnim;
 
+var cur, rings, menuImg;
+var nineSl;
+
 Loop.update = function() {
 	$("#fps").html("FPS: " + Time.fps + " | Delta: " + Time.delta);
 
@@ -28,29 +31,20 @@ $(document).ready(function() {
 	c = Canvas("canvas", false); //Uses canvas 2d api
 	glCanvas = Canvas("glCanvas", true); //Uses WebGL
 
-	//Attach elements to the key/mouse manager to check for input. 
+	//Attach elements to the key/mouse manager to check for input.
 	keys.attach(c.getElement());
 	keys.attach(glCanvas.getElement());
 	mouse.attach(c.getElement());
 
-	var cur = loader.image("cursor.png");
-	var rings = loader.image("Rings_28x30_strip7.png");
+	cur = loader.image("cursor.png");
+	rings = loader.image("Rings_28x30_strip7.png");
 
 	var greg = Graphic(cur);
 	ringAnim = Animation(rings, 28, 30);
 
-	var menuImg = loader.image("menu.png");
-	var nineSl = NineSlice(menuImg);
+	menuImg = loader.image("menu.png");
+	nineSl = NineSlice(menuImg);
 
-	nineSl.topLeft = Rect(0, 0, 6, 5);
-	nineSl.top = Rect(6, 0, 52, 5);
-	nineSl.topRight = Rect(58, 0, 6, 6);
-	nineSl.right = Rect(58, 5, 6, 54);
-	nineSl.bottomRight = Rect(58, 59, 6, 5);
-	nineSl.bottom = Rect(6, 59, 52, 5);
-	nineSl.bottomLeft = Rect(0, 59, 6, 5);
-	nineSl.left = Rect(0, 5, 6, 54);
-	nineSl.center = Rect(6, 5, 52, 54);
 
 	c.render = function() {
 		var gc = c.getContext();
@@ -80,8 +74,6 @@ $(document).ready(function() {
 		gl.clear(gl.COLOR_BUFFER_BIT);
 	};
 
-	Loop.init(60); //Initialize the engine and make it sync to 60 fps.
-
 	//Add the canvases to the loop for rendering.
 	Loop.add(c);
 	Loop.add(glCanvas);
@@ -90,5 +82,6 @@ $(document).ready(function() {
 });
 
 function onAssetLoad() {
+	nineSl.setDimensions(Rect(6, 5, 52, 54));
 	Loop.run();
 }

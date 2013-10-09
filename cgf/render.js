@@ -8,6 +8,27 @@ function NineSlice(image) {
         cached: false,
         cache: undefined,
 
+        setDimensions: function(rect) {
+            var x = rect.x;
+            var y = rect.y;
+            var w = rect.width;
+            var h = rect.height;
+            var x2 = x + w;
+            var y2 = y + h;
+
+            this.center = rect;
+            this.right = Rect(x2, y, img.width - x2, h);
+            this.left = Rect(0, y, x, h);
+
+            this.topLeft = Rect(0, 0, x, y);
+            this.top = Rect(x, 0, w, y);
+            this.topRight = Rect(x2, 0, img.width - x2, y);
+
+            this.bottomRight = Rect(x2, y2, img.width - x2, img.height - y2);
+            this.bottom = Rect(x, y2, w, img.height - y2);
+            this.bottomLeft = Rect(0, y2, x, img.height - y2);
+        },
+
         copyDimensions: function(slice) {
             this.topLeft = slice.topLeft;
             this.top = slice.top;
