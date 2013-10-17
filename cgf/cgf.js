@@ -84,6 +84,13 @@ Loop.add = function(canvas) {
     Loop.canvasList.push(canvas);
 };
 
+//Override default requestAnimationFrame for maximum compatibility.
+requestAnimationFrame = window.requestAnimationFrame
+                       || window.mozRequestAnimationFrame
+                       || window.webkitRequestAnimationFrame
+                       || window.msRequestAnimationFrame
+                       || function(func) { setTimeout(func, 1000/60) };
+
 //This is pretty much the loop.
 Loop.run = function() {
     Loop.update();
@@ -115,6 +122,7 @@ Time.lastFPS = (new Date()).getTime();
 Time.fpsCounter = 0;
 Time.lastFrame = 0;
 
+
 Time.get = function() {
     'use strict';
     return (new Date()).getTime();
@@ -137,3 +145,4 @@ Time.update = function() {
         Time.delta = deltaTime;
     }
 };
+
